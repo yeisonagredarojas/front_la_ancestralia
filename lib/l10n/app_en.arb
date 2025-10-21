@@ -1,0 +1,34 @@
+{
+  "@@locale": "en",
+  "appTitle": "Inga Language",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "loginButton": "Sign In",
+  "logout": "Logout",
+  "words": "Words",
+  "lessons": "Lessons",
+  "profile": "Profile",
+  "createWord": "New Word",
+  "createLesson": "New Lesson",
+  "edit": "Edit",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "save": "Save",
+  "wordInInga": "Word in Inga",
+  "spanishTranslation": "Spanish Translation",
+  "category": "Category",
+  "title": "Title",
+  "description": "Description",
+  "welcome": "Welcome {name}!",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "aiAssistant": "AI Assistant",
+  "askAI": "Ask the assistant",
+  "generateTranslation": "Generate translation with AI"
+}

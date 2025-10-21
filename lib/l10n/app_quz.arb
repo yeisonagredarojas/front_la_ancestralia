@@ -1,0 +1,15 @@
+{
+  "@@locale": "quz",
+  "appTitle": "Inga Shimi",
+  "login": "Yaicuna",
+  "email": "Correo",
+  "password": "Yaicui kliabi",
+  "loginButton": "Yaicuna",
+  "logout": "Llujshina",
+  "words": "Shimikuna",
+  "lessons": "Iachichikuna",
+  "profile": "Nukapa",
+  "createWord": "Musu Shimi",
+  "createLesson": "Musu Iachichi",
+  "welcome": "¡Allikauimi {name}!"
+}

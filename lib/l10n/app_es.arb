@@ -1,0 +1,34 @@
+{
+  "@@locale": "es",
+  "appTitle": "Lengua Inga",
+  "login": "Iniciar Sesión",
+  "email": "Email",
+  "password": "Contraseña",
+  "loginButton": "Ingresar",
+  "logout": "Cerrar Sesión",
+  "words": "Palabras",
+  "lessons": "Lecciones",
+  "profile": "Perfil",
+  "createWord": "Nueva Palabra",
+  "createLesson": "Nueva Lección",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "wordInInga": "Palabra en Inga",
+  "spanishTranslation": "Traducción al Español",
+  "category": "Categoría",
+  "title": "Título",
+  "description": "Descripción",
+  "welcome": "¡Bienvenido {name}!",
+  "@welcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "aiAssistant": "Asistente IA",
+  "askAI": "Pregunta al asistente",
+  "generateTranslation": "Generar traducción con IA"
+}
