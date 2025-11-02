@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
+import '../services/games_service.dart';  // ← AGREGAR
 import 'login_screen.dart';
 import 'palabras_screen.dart';
 import 'lecciones_screen.dart';
 import 'perfil_screen.dart';
 import 'ai_assistant_screen.dart';
+import 'games/games_list_screen.dart';  // ← AGREGAR
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,19 +23,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? _userData;
   String? _userRole;
   String _currentLocale = 'es';
+  String? _token;  // ← AGREGAR
+  GamesService? _gamesService;  // ← AGREGAR
 
-  final List<Widget> _screens = [
-    const PalabrasScreen(),
-    const LeccionesScreen(),
-    const AIAssistantScreen(),
-    const PerfilScreen(),
-  ];
+  late final List<Widget> _screens;  // ← CAMBIAR de final a late final
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
     _loadLocale();
+    _initializeScreens();  // ← AGREGAR
+  }
+
+  Future<void> _initializeScreens() async {
+    _token = await _authService.getToken();  // Asumiendo que tienes este método
+    _gamesService = GamesService(token: _token);
+    
+    setState(() {
+      _screens = [
+        const PalabrasScreen(),
+        const LeccionesScreen(),
+        GamesListScreen(gamesService: _gamesService!),  // ← AGREGAR
+        const AIAssistantScreen(),
+        const PerfilScreen(),
+      ];
+    });
   }
 
   Future<void> _loadUserData() async {
@@ -126,7 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: _buildDrawer(),
-      body: _screens[_currentIndex],
+      body: _gamesService == null 
+          ? const Center(child: CircularProgressIndicator())  // ← Mientras carga
+          : _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
@@ -141,6 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'Lecciones',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.gamepad),  // ← AGREGAR
+            label: 'Juegos',            // ← AGREGAR
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.psychology),
@@ -197,12 +218,21 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() => _currentIndex = 1);
             },
           ),
+          // ← AGREGAR ESTE ListTile
+          ListTile(
+            leading: const Icon(Icons.gamepad),
+            title: const Text('Juegos'),
+            onTap: () {
+              Navigator.pop(context);
+              setState(() => _currentIndex = 2);
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.psychology),
             title: const Text('Asistente IA'),
             onTap: () {
               Navigator.pop(context);
-              setState(() => _currentIndex = 2);
+              setState(() => _currentIndex = 3);  // ← Cambiar de 2 a 3
             },
           ),
           ListTile(
@@ -210,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const Text('Perfil'),
             onTap: () {
               Navigator.pop(context);
-              setState(() => _currentIndex = 3);
+              setState(() => _currentIndex = 4);  // ← Cambiar de 3 a 4
             },
           ),
           const Divider(),
