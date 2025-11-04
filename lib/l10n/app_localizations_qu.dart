@@ -4,60 +4,60 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Spanish Castilian (`es`).
-class AppLocalizationsEs extends AppLocalizations {
-  AppLocalizationsEs([String locale = 'es']) : super(locale);
+/// The translations for Quechua (`qu`).
+class AppLocalizationsQu extends AppLocalizations {
+  AppLocalizationsQu([String locale = 'qu']) : super(locale);
 
   @override
-  String get appTitle => 'Lengua Inga';
+  String get appTitle => 'Shimi Inga';
 
   @override
   String get platformSubtitle => 'Plataforma Educativa Cultural';
 
   @override
   String get description =>
-      'Plataforma educativa para la documentación y difusión de la lengua Inga';
+      'Plataforma pa\' documentar y difundir la lengua Inga';
 
   @override
-  String get loginTitle => 'Iniciar Sesión';
+  String get loginTitle => 'Ragshi Uruy';
 
   @override
   String get loginEmailLabel => 'Email';
 
   @override
-  String get loginPasswordLabel => 'Contraseña';
+  String get loginPasswordLabel => 'Shina';
 
   @override
-  String get loginButton => 'Ingresar';
+  String get loginButton => 'Uruy';
 
   @override
-  String get registerButton => 'Crear cuenta de estudiante';
+  String get registerButton => 'Rrangki Shina Estudiante';
 
   @override
-  String get enterEmail => 'Ingrese su email';
+  String get enterEmail => 'Shina email';
 
   @override
-  String get invalidEmail => 'Email inválido';
+  String get invalidEmail => 'Email mashi';
 
   @override
-  String get enterPassword => 'Ingrese su contraseña';
+  String get enterPassword => 'Shina shina';
 
   @override
   String get passwordMinLength => 'Mínimo 6 caracteres';
 
   @override
   String welcomeMessage(Object nombre) {
-    return '¡Bienvenido $nombre!';
+    return 'Bunji $nombre!';
   }
 
   @override
-  String get loginError => 'Error al iniciar sesión';
+  String get loginError => 'Uruy koshka';
 
   @override
-  String get connectionError => 'Error de conexión';
+  String get connectionError => 'Rrekro mashi';
 
   @override
-  String get testUsersTitle => 'Usuarios de prueba:';
+  String get testUsersTitle => 'Usuarios test:';
 
   @override
   String get adminUser => 'Admin: admin@inga.com / admin123';
@@ -66,71 +66,70 @@ class AppLocalizationsEs extends AppLocalizations {
   String get teacherUser => 'Profesor: profesor@inga.com / profesor123';
 
   @override
-  String get registerScreenTitle => 'Registro de Estudiante';
+  String get registerScreenTitle => 'Rrangki Estudiante';
 
   @override
-  String get createAccountTitle => 'Crear Cuenta';
+  String get createAccountTitle => 'Rrangki Shina';
 
   @override
-  String get createAccountSubtitle => 'Regístrate como estudiante';
+  String get createAccountSubtitle => 'Shina estudiante';
 
   @override
-  String get nameLabel => 'Nombre Completo';
+  String get nameLabel => 'Shina Bunji';
 
   @override
-  String get enterName => 'Ingrese su nombre';
+  String get enterName => 'Shina shina bunji';
 
   @override
   String get registerEmailLabel => 'Email';
 
   @override
-  String get enterRegisterEmail => 'Ingrese su email';
+  String get enterRegisterEmail => 'Shina email';
 
   @override
-  String get invalidRegisterEmail => 'Email inválido';
+  String get invalidRegisterEmail => 'Email mashi';
 
   @override
-  String get registerPasswordLabel => 'Contraseña';
+  String get registerPasswordLabel => 'Shina';
 
   @override
-  String get confirmPasswordLabel => 'Confirmar Contraseña';
+  String get confirmPasswordLabel => 'Rranga Shina';
 
   @override
-  String get enterRegisterPassword => 'Ingrese su contraseña';
+  String get enterRegisterPassword => 'Shina shina';
 
   @override
-  String get confirmPasswordEmpty => 'Confirme su contraseña';
+  String get confirmPasswordEmpty => 'Rranga shina';
 
   @override
-  String get passwordMismatch => 'Las contraseñas no coinciden';
+  String get passwordMismatch => 'Shina mashi';
 
   @override
-  String get registerSuccess =>
-      '¡Registro exitoso! Ahora puedes iniciar sesión';
+  String get registerSuccess => 'Rrangki sukka! Uruy tura';
 
   @override
-  String get registerError => 'Error al registrarse';
+  String get registerError => 'Rrangki koshka';
 
   @override
-  String get alreadyHaveAccount => '¿Ya tienes cuenta?';
+  String get alreadyHaveAccount => 'Shina shina?';
 
   @override
-  String get loginLinkText => 'Inicia Sesión';
+  String get loginLinkText => 'Uruy';
 
   @override
-  String get words => 'Palabras';
+  String get words => 'Shina';
 
   @override
-  String get lessons => 'Lecciones';
+  String get lessons => 'Leshi';
 
   @override
   String get aiAssistant => 'Asistente IA';
 
   @override
-  String get vocabulary => 'Vocabulario';
+  String get vocabulary => 'Shina List';
 
   @override
-  String get games => 'Juegos';
+  String get games => 'Jueji';
 
   @override
   String get profile => 'Perfil';
@@ -139,49 +138,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logoutConfirm => '¿Seguro que deseas cerrar sesión?';
 
   @override
-  String get logout => 'Cerrar sesión';
+  String get logout => 'Uruy';
 
   @override
-  String get cancel => 'Cancelar';
+  String get cancel => 'Kari';
 
   @override
   String get languageChanged => 'Idioma cambiado correctamente';
 
   @override
-  String get about => 'Acerca de';
+  String get about => 'Acerca';
 
   @override
   String get settings => 'Ajustes';
 
   @override
-  String get language => 'Idioma';
+  String get language => 'Shimi';
 
   @override
   String get spanish => 'Español';
 
   @override
-  String get english => 'Inglés';
+  String get english => 'English';
 
   @override
-  String get inga => 'Inga Shimi';
+  String get inga => 'Shimi Inga';
 
   @override
-  String get palabrasScreenTitle => 'Palabras';
+  String get palabrasScreenTitle => 'Shina';
 
   @override
-  String get editWord => 'Editar Palabra';
+  String get editWord => 'Rranga Shina';
 
   @override
-  String get newWord => 'Nueva Palabra';
+  String get newWord => 'Shina Nyi';
 
   @override
-  String get wordInInga => 'Palabra en Inga';
+  String get wordInInga => 'Shina Inga';
 
   @override
-  String get translation => 'Traducción al Español';
+  String get translation => 'Shina Español';
 
   @override
-  String get category => 'Categoría';
+  String get category => 'Kategori';
 
   @override
   String get updateWordButton => 'Actualizar';
@@ -193,36 +192,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteWordButton => 'Eliminar';
 
   @override
-  String get wordDeletedToast => 'Palabra eliminada';
+  String get wordDeletedToast => 'Shina eliminado';
 
   @override
-  String get wordUpdatedToast => 'Palabra actualizada';
+  String get wordUpdatedToast => 'Shina actualizado';
 
   @override
-  String get wordCreatedToast => 'Palabra creada';
+  String get wordCreatedToast => 'Shina creado';
 
   @override
-  String get completeFieldsToast => 'Complete los campos obligatorios';
+  String get completeFieldsToast => 'Complete campos';
 
   @override
   String deleteWordConfirm(Object word) {
-    return '¿Eliminar \"$word\"?';
+    return 'Eliminar \"$word\"?';
   }
 
   @override
-  String get noWordsMessage => 'No hay palabras registradas';
+  String get noWordsMessage => 'Shina mashi';
 
   @override
-  String get vocabularioScreenTitle => 'Vocabulario Inga';
+  String get vocabularioScreenTitle => 'Shina Inga';
 
   @override
-  String get vocabularioScreenSearchHint => 'Buscar palabra...';
+  String get vocabularioScreenSearchHint => 'Rrangi shina...';
 
   @override
   String get vocabularioScreenAllCategories => 'Todas';
 
   @override
-  String get vocabularioScreenNoResults => 'No se encontraron palabras';
+  String get vocabularioScreenNoResults => 'Shina mashi';
 
   @override
   String vocabularioScreenResultCount(num count) {
@@ -232,51 +231,50 @@ class AppLocalizationsEs extends AppLocalizations {
       other: 's',
       one: '',
     );
-    return '$count palabra$_temp0';
+    return '$count shina$_temp0';
   }
 
   @override
-  String get vocabularioScreenLoadingError => 'Error al cargar vocabulario';
+  String get vocabularioScreenLoadingError => 'Koshka shina';
 
   @override
-  String get vocabularioDetailTitle => 'Información adicional';
+  String get vocabularioDetailTitle => 'Shina información';
 
   @override
   String get vocabularioDetailAudioAvailable => 'Audio disponible';
 
   @override
-  String get vocabularioDetailAudioPlayingMsg =>
-      'Función de audio en desarrollo';
+  String get vocabularioDetailAudioPlayingMsg => 'Audio en desarrollo';
 
   @override
-  String get vocabularioDetailCloseButton => 'Cerrar';
+  String get vocabularioDetailCloseButton => 'Chukki';
 
   @override
-  String get leccionesScreenTitle => 'Lecciones';
+  String get leccionesScreenTitle => 'Leshi';
 
   @override
-  String get leccionesScreenNoLessons => 'No hay lecciones registradas';
+  String get leccionesScreenNoLessons => 'Leshi mashi';
 
   @override
-  String get leccionesScreenLessonWords => 'Palabras en esta lección:';
+  String get leccionesScreenLessonWords => 'Shina de leshi:';
 
   @override
-  String get leccionesScreenCreateLesson => 'Nueva Lección';
+  String get leccionesScreenCreateLesson => 'Leshi Nyi';
 
   @override
-  String get leccionesScreenEditLesson => 'Editar Lección';
+  String get leccionesScreenEditLesson => 'Rranga Leshi';
 
   @override
-  String get leccionesScreenLessonTitle => 'Título';
+  String get leccionesScreenLessonTitle => 'Bunji';
 
   @override
   String get leccionesScreenLessonDescription => 'Descripción';
 
   @override
-  String get leccionesScreenLessonWordsLabel => 'Palabras de la lección:';
+  String get leccionesScreenLessonWordsLabel => 'Shina de leshi:';
 
   @override
-  String get leccionesScreenCancel => 'Cancelar';
+  String get leccionesScreenCancel => 'Kari';
 
   @override
   String get leccionesScreenCreateButton => 'Crear';
@@ -286,64 +284,61 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String leccionesScreenDeleteConfirmation(Object title) {
-    return '¿Eliminar \"$title\"?';
+    return 'Eliminar \"$title\"?';
   }
 
   @override
-  String get leccionesScreenLessonCreated => 'Lección creada';
+  String get leccionesScreenLessonCreated => 'Leshi creado';
 
   @override
-  String get leccionesScreenLessonUpdated => 'Lección actualizada';
+  String get leccionesScreenLessonUpdated => 'Leshi actualizado';
 
   @override
-  String get leccionesScreenLessonDeleted => 'Lección eliminada';
+  String get leccionesScreenLessonDeleted => 'Leshi eliminado';
 
   @override
-  String get leccionesScreenEnterTitle => 'Ingrese un título';
+  String get leccionesScreenEnterTitle => 'Shina bunji';
 
   @override
-  String get leccionesScreenNoWordsInLesson =>
-      'No hay palabras en esta lección';
+  String get leccionesScreenNoWordsInLesson => 'Shina mashi';
 
   @override
   String leccionesScreenWordsCount(Object count) {
-    return '$count palabras';
+    return '$count shina';
   }
 
   @override
-  String get aiAssistantScreenTitle => 'Asistente IA - Lengua Inga';
+  String get aiAssistantScreenTitle => 'Asistente IA - Shimi Inga';
 
   @override
-  String get aiAssistantPlaceholder => 'Escribe tu pregunta...';
+  String get aiAssistantPlaceholder => 'Rrangi pregunta...';
 
   @override
-  String get aiAssistantThinking => 'Pensando...';
+  String get aiAssistantThinking => 'Shina mashi...';
 
   @override
   String get aiAssistantWelcome =>
-      '👋 ¡Hola! Soy tu asistente de la lengua Inga.\n\nPuedo ayudarte a:\n• Traducir palabras (Español ↔ Inga)\n• Explicar gramática y pronunciación\n• Dar ejemplos de uso\n• Compartir aspectos culturales del pueblo Inga\n\n¿Qué deseas aprender hoy?';
+      '👋 Bunji! Shimi nki shina Inga.\n\nNki rranga:\n• Rrangi shina (Español ↔ Inga)\n• Rrangi gramática y pronunciación\n• Shina ejemplo\n• Shina cultura Inga\n\n¿Kashi rrangi tura?';
 
   @override
-  String get aiAssistantNotReady =>
-      '❌ La IA no está lista todavía.\nEspera unos segundos o revisa tu API Key.';
+  String get aiAssistantNotReady => '❌ IA mashi.\nEsperi o revisi API Key.';
 
   @override
-  String get aiAssistantInitSuccess => '✅ IA inicializada correctamente.';
+  String get aiAssistantInitSuccess => '✅ IA rrangi';
 
   @override
   String aiAssistantInitError(Object error) {
-    return '❌ No se pudo inicializar la IA.\nVerifica tu conexión o API Key.\n\nDetalles: $error';
+    return '❌ IA mashi.\nRevisi conexión o API Key.\n\nDetalles: $error';
   }
 
   @override
-  String get aiAssistantRequestError =>
-      '⚠️ Ocurrió un error al procesar tu solicitud.';
+  String get aiAssistantRequestError => '⚠️ Koshka procesando';
 
   @override
   String get aiAssistantQuickActionsTitle => 'Acciones Rápidas';
 
   @override
-  String get aiAssistantQuickTranslateTitle => 'Traducir palabra';
+  String get aiAssistantQuickTranslateTitle => 'Rrangi Shina';
 
   @override
   String get aiAssistantQuickTranslateSubtitle => 'Español → Inga';
@@ -356,17 +351,17 @@ class AppLocalizationsEs extends AppLocalizations {
       'Aprender cómo se pronuncia';
 
   @override
-  String get aiAssistantQuickExampleTitle => 'Ejemplo de uso';
+  String get aiAssistantQuickExampleTitle => 'Ejemplo de Uso';
 
   @override
   String get aiAssistantQuickExampleSubtitle => 'Oraciones comunes';
 
   @override
-  String get aiAssistantEmptyConversation => 'Inicia una conversación';
+  String get aiAssistantEmptyConversation => 'Inicia conversación';
 
   @override
   String get aiAssistantApiKeyMissing =>
-      '⚠️ No se detectó una API Key.\nConfigúrala en Google AI Studio: https://aistudio.google.com/app/apikey';
+      '⚠️ API Key mashi.\nConfigura en: https://aistudio.google.com/app/apikey';
 
   @override
   String get juegosScreenTitle => 'Juegos Interactivos';

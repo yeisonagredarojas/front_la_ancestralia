@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app_lengua_inga/l10n/app_localizations.dart';
 import '../models/palabra.dart';
 import '../services/palabra_service.dart';
 import '../services/auth_service.dart';
@@ -39,7 +40,7 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
       }
     } catch (e) {
       Fluttertoast.showToast(
-        msg: 'Error al cargar palabras',
+        msg: AppLocalizations.of(context)?.vocabularioScreenLoadingError ?? 'Error al cargar palabras',
         backgroundColor: Colors.red,
       );
     }
@@ -50,6 +51,7 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
   }
 
   Future<void> _showPalabraDialog({Palabra? palabra}) async {
+    final loc = AppLocalizations.of(context);
     final isEdit = palabra != null;
     final palabraIngaController = TextEditingController(text: palabra?.palabraInga ?? '');
     final traduccionController = TextEditingController(text: palabra?.traduccionEspanol ?? '');
@@ -58,32 +60,32 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(isEdit ? 'Editar Palabra' : 'Nueva Palabra'),
+        title: Text(isEdit ? loc?.editWord ?? 'Editar Palabra' : loc?.newWord ?? 'Nueva Palabra'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: palabraIngaController,
-                decoration: const InputDecoration(
-                  labelText: 'Palabra en Inga',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: loc?.wordInInga ?? 'Palabra en Inga',
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: traduccionController,
-                decoration: const InputDecoration(
-                  labelText: 'Traducción al Español',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: loc?.translation ?? 'Traducción al Español',
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: categoriaController,
-                decoration: const InputDecoration(
-                  labelText: 'Categoría',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: loc?.category ?? 'Categoría',
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ],
@@ -92,13 +94,13 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(loc?.cancel ?? 'Cancelar'),
           ),
           ElevatedButton(
             onPressed: () async {
               if (palabraIngaController.text.isEmpty || traduccionController.text.isEmpty) {
                 Fluttertoast.showToast(
-                  msg: 'Complete los campos obligatorios',
+                  msg: loc?.completeFieldsToast ?? 'Complete campos',
                   backgroundColor: Colors.orange,
                 );
                 return;
@@ -112,15 +114,15 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
 
               try {
                 if (isEdit) {
-                  await _palabraService.updatePalabra(palabra.idPalabra!, newPalabra);
+                  await _palabraService.updatePalabra(palabra!.idPalabra!, newPalabra);
                   Fluttertoast.showToast(
-                    msg: 'Palabra actualizada',
+                    msg: loc?.wordUpdatedToast ?? 'Palabra actualizada',
                     backgroundColor: Colors.green,
                   );
                 } else {
                   await _palabraService.createPalabra(newPalabra);
                   Fluttertoast.showToast(
-                    msg: 'Palabra creada',
+                    msg: loc?.wordCreatedToast ?? 'Palabra creada',
                     backgroundColor: Colors.green,
                   );
                 }
@@ -132,7 +134,7 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
                 );
               }
             },
-            child: Text(isEdit ? 'Actualizar' : 'Crear'),
+            child: Text(isEdit ? loc?.updateWordButton ?? 'Actualizar' : loc?.createWordButton ?? 'Crear'),
           ),
         ],
       ),
@@ -144,20 +146,23 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
   }
 
   Future<void> _deletePalabra(Palabra palabra) async {
+    final loc = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Eliminar Palabra'),
-        content: Text('¿Eliminar "${palabra.palabraInga}"?'),
+        title: Text(loc?.deleteWordButton ?? 'Eliminar Palabra'),
+        content: Text(
+          loc!.deleteWordConfirm(palabra.palabraInga),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(loc?.cancel ?? 'Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Eliminar'),
+            child: Text(loc?.deleteWordButton ?? 'Eliminar'),
           ),
         ],
       ),
@@ -167,7 +172,7 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
       try {
         await _palabraService.deletePalabra(palabra.idPalabra!);
         Fluttertoast.showToast(
-          msg: 'Palabra eliminada',
+          msg: loc?.wordDeletedToast ?? 'Palabra eliminada',
           backgroundColor: Colors.green,
         );
         _loadPalabras();
@@ -182,16 +187,22 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text(loc?.palabrasScreenTitle ?? 'Palabras'),
+        backgroundColor: Colors.indigo,
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadPalabras,
               child: _palabras.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'No hay palabras registradas',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        loc?.noWordsMessage ?? 'No hay palabras registradas',
+                        style: const TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     )
                   : ListView.builder(
@@ -221,33 +232,33 @@ class _PalabrasScreenState extends State<PalabrasScreen> {
                                 if (palabra.categoria != null)
                                   Text(
                                     palabra.categoria!,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
+                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                               ],
                             ),
                             trailing: _canEdit()
                                 ? PopupMenuButton(
                                     itemBuilder: (context) => [
-                                      const PopupMenuItem(
+                                      PopupMenuItem(
                                         value: 'edit',
                                         child: Row(
                                           children: [
-                                            Icon(Icons.edit, size: 20),
-                                            SizedBox(width: 8),
-                                            Text('Editar'),
+                                            const Icon(Icons.edit, size: 20),
+                                            const SizedBox(width: 8),
+                                            Text(loc?.editWord ?? 'Editar'),
                                           ],
                                         ),
                                       ),
-                                      const PopupMenuItem(
+                                      PopupMenuItem(
                                         value: 'delete',
                                         child: Row(
                                           children: [
-                                            Icon(Icons.delete, size: 20, color: Colors.red),
-                                            SizedBox(width: 8),
-                                            Text('Eliminar', style: TextStyle(color: Colors.red)),
+                                            const Icon(Icons.delete, size: 20, color: Colors.red),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              loc?.deleteWordButton ?? 'Eliminar',
+                                              style: const TextStyle(color: Colors.red),
+                                            ),
                                           ],
                                         ),
                                       ),

@@ -11,32 +11,31 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  
+
   # HTTP y APIs
   dio: ^5.4.0
-  
+
   # Almacenamiento seguro
   flutter_secure_storage: ^9.0.0
   shared_preferences: ^2.2.2
-  
+
   # Estado
   provider: ^6.1.1
-  
+
   # JWT
   jwt_decoder: ^2.0.1
-  
+
   # UI
   fluttertoast: ^8.2.4
-  
+
   # Internacionalización
   intl: ^0.20.2
-  
+
   # IA - Gemini (Gratis)
-  #google_generative_ai: ^0.2.2
-  
+  google_generative_ai: ^0.4.7
+
   # Iconos
   cupertino_icons: ^1.0.2
-  google_generative_ai: ^0.4.7
 
 dev_dependencies:
   flutter_test:

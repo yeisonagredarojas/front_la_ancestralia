@@ -6,6 +6,7 @@ import '../utils/jwt_utils.dart';
 
 class AuthService {
   final Dio _dio = Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+  
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   /// Login: autentica al usuario y guarda el token
@@ -36,6 +37,34 @@ class AuthService {
       }
 
       return {'success': false, 'message': 'Error en el login'};
+    } on DioException catch (e) {
+      return {
+        'success': false,
+        'message': e.response?.data['message'] ?? 'Error de conexión',
+      };
+    }
+  }
+
+  /// Registro: crea una nueva cuenta de estudiante
+  Future<Map<String, dynamic>> register(String nombre, String email, String password) async {
+    try {
+      final response = await _dio.post(
+        '${ApiConfig.baseUrl}/auth/register',
+        data: {
+          'nombre': nombre,
+          'email': email,
+          'contraseña': password,
+        },
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': response.data['message'] ?? 'Registro exitoso',
+        };
+      }
+
+      return {'success': false, 'message': 'Error en el registro'};
     } on DioException catch (e) {
       return {
         'success': false,
