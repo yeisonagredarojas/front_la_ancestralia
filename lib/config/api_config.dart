@@ -20,6 +20,7 @@ class ApiConfig {
   static const String gamesRanking = '/games/ranking';
   static const String gamesCategorias = '/games/categorias'; 
   static const String gamesPalabrasCategoria = '/games/palabras-categoria';  
+  static const String gamesOraciones = '/games/oraciones';
   
   // Keys para storage
   static const String tokenKey = 'auth_token';

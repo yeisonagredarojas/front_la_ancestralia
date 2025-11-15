@@ -414,4 +414,27 @@ class GamesService {
       throw Exception('Error al obtener palabras por categoría: ${response.statusCode}');
     }
   }
+
+  // Obtener oraciones para completar frases
+  Future<List<OracionJuego>> obtenerOracionesParaJuego({
+    String nivelDificultad = 'medio',
+    int cantidad = 6,
+  }) async {
+    final queryParams = {
+      'nivel_dificultad': nivelDificultad,
+      'cantidad': cantidad.toString(),
+    };
+
+    final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}')
+        .replace(queryParameters: queryParams);
+
+    final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => OracionJuego.fromJson(json)).toList();
+    } else {
+      throw Exception('Error al obtener oraciones: ${response.statusCode}');
+    }
+  }
 }

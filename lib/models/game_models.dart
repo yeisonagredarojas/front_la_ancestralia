@@ -257,3 +257,61 @@ class OpcionPalabra {
     );
   }
 }
+
+// Modelo para oraciones del juego
+class OracionJuego {
+  final int idOracion;
+  final String textoEspanol;  // Con hueco: "Yo _____ dos cerdos negros"
+  final String textoCompletoEspanol;
+  final String textoInga;
+  final String palabraCorrecta;
+  final String palabraCorrectaEspanol;
+  final List<OpcionOracion> opciones;
+  final String categoria;
+
+  OracionJuego({
+    required this.idOracion,
+    required this.textoEspanol,
+    required this.textoCompletoEspanol,
+    required this.textoInga,
+    required this.palabraCorrecta,
+    required this.palabraCorrectaEspanol,
+    required this.opciones,
+    required this.categoria,
+  });
+
+  factory OracionJuego.fromJson(Map<String, dynamic> json) {
+    return OracionJuego(
+      idOracion: json['id_oracion'],
+      textoEspanol: json['texto_espanol'],
+      textoCompletoEspanol: json['texto_completo_espanol'],
+      textoInga: json['texto_inga'],
+      palabraCorrecta: json['palabra_correcta'],
+      palabraCorrectaEspanol: json['palabra_correcta_espanol'],
+      opciones: (json['opciones'] as List)
+          .map((o) => OpcionOracion.fromJson(o))
+          .toList(),
+      categoria: json['categoria'],
+    );
+  }
+}
+
+class OpcionOracion {
+  final String palabraInga;
+  final String traduccionEspanol;
+  final bool esCorrecta;
+
+  OpcionOracion({
+    required this.palabraInga,
+    required this.traduccionEspanol,
+    required this.esCorrecta,
+  });
+
+  factory OpcionOracion.fromJson(Map<String, dynamic> json) {
+    return OpcionOracion(
+      palabraInga: json['palabra_inga'],
+      traduccionEspanol: json['traduccion_espanol'],
+      esCorrecta: json['es_correcta'] ?? false,
+    );
+  }
+}

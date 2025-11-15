@@ -3,6 +3,7 @@ import '../../models/game_models.dart';
 import '../../services/games_service.dart';
 import 'emparejar_palabras_screen.dart';
 import 'categoria_selection_screen.dart';  // ← AGREGAR
+import 'completar_frases_screen.dart'; 
 
 class GamesListScreen extends StatefulWidget {
   final GamesService gamesService;
@@ -558,6 +559,50 @@ class _GamesListScreenState extends State<GamesListScreen> {
   //   }
   // }
 
+  // void _iniciarJuego(Juego juego, String nivel) {
+  //   print('🎮 Iniciando juego: ${juego.nombre}');
+  //   print('📋 Tipo: ${juego.tipoJuego}');
+    
+  //   if (juego.tipoJuego == 'emparejar') {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => EmparejarPalabrasScreen(
+  //           idJuego: juego.idJuego,
+  //           nivelDificultad: nivel,
+  //           gamesService: widget.gamesService,
+  //         ),
+  //       ),
+  //     ).then((_) => _cargarDatos());
+  //   } else if (juego.tipoJuego == 'seleccionar_imagen') {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => CategoriaSelectionScreen(
+  //           idJuego: juego.idJuego,
+  //           nivelDificultad: nivel,
+  //           gamesService: widget.gamesService,
+  //         ),
+  //       ),
+  //     ).then((_) => _cargarDatos());
+  //   } else if (juego.tipoJuego == 'completar_frase') {
+  //     // Por ahora redirigir a Kawai Suti o mostrar mensaje
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Este juego estará disponible próximamente'),
+  //         backgroundColor: Colors.orange,
+  //       ),
+  //     );
+  //   } else {
+  //     print('⚠️ Tipo de juego no reconocido: ${juego.tipoJuego}');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Este juego estará disponible próximamente'),
+  //       ),
+  //     );
+  //   }
+  // }
+
   void _iniciarJuego(Juego juego, String nivel) {
     print('🎮 Iniciando juego: ${juego.nombre}');
     print('📋 Tipo: ${juego.tipoJuego}');
@@ -584,14 +629,17 @@ class _GamesListScreenState extends State<GamesListScreen> {
           ),
         ),
       ).then((_) => _cargarDatos());
-    } else if (juego.tipoJuego == 'completar_frase') {
-      // Por ahora redirigir a Kawai Suti o mostrar mensaje
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Este juego estará disponible próximamente'),
-          backgroundColor: Colors.orange,
+    } else if (juego.tipoJuego == 'completar_frase') {  // ← AGREGAR ESTO
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CompletarFrasesScreen(
+            idJuego: juego.idJuego,
+            nivelDificultad: nivel,
+            gamesService: widget.gamesService,
+          ),
         ),
-      );
+      ).then((_) => _cargarDatos());
     } else {
       print('⚠️ Tipo de juego no reconocido: ${juego.tipoJuego}');
       ScaffoldMessenger.of(context).showSnackBar(
