@@ -1,45 +1,45 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-import 'app_localizations.dart';
+import 'l10n.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Cusco Quechua (`quz`).
-class AppLocalizationsQuz extends AppLocalizations {
-  AppLocalizationsQuz([String locale = 'quz']) : super(locale);
+/// The translations for Spanish Castilian (`es`).
+class AppLocalizationsEs extends AppLocalizations {
+  AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Inga Shimi';
+  String get appTitle => 'Lengua Inga';
 
   @override
-  String get login => 'Yaicuna';
+  String get login => 'Iniciar Sesión';
 
   @override
-  String get email => 'Correo';
+  String get email => 'Email';
 
   @override
-  String get password => 'Yaicui kliabi';
+  String get password => 'Contraseña';
 
   @override
-  String get loginButton => 'Yaicuna';
+  String get loginButton => 'Ingresar';
 
   @override
-  String get logout => 'Llujshina';
+  String get logout => 'Cerrar Sesión';
 
   @override
-  String get words => 'Shimikuna';
+  String get words => 'Palabras';
 
   @override
-  String get lessons => 'Iachichikuna';
+  String get lessons => 'Lecciones';
 
   @override
-  String get profile => 'Nukapa';
+  String get profile => 'Perfil';
 
   @override
-  String get createWord => 'Musu Shimi';
+  String get createWord => 'Nueva Palabra';
 
   @override
-  String get createLesson => 'Musu Iachichi';
+  String get createLesson => 'Nueva Lección';
 
   @override
   String get edit => 'Editar';
@@ -70,7 +70,7 @@ class AppLocalizationsQuz extends AppLocalizations {
 
   @override
   String welcome(String name) {
-    return '¡Allikauimi $name!';
+    return '¡Bienvenido $name!';
   }
 
   @override

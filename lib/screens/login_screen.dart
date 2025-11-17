@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom_button.dart';
 import 'home_screen.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,13 +27,15 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Función para manejar el inicio de sesión
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
+      // 🔹 Eliminar token viejo antes de iniciar sesión
+      await _authService.logout();
+
       final result = await _authService.login(
         _emailController.text.trim(),
         _passwordController.text,
@@ -87,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo o Icono principal
+                  // Logo o Icono
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: const BoxDecoration(
@@ -102,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Título y subtítulo
+                  // Título
                   const Text(
                     'Lengua Inga',
                     style: TextStyle(
@@ -121,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 50),
 
-                  // Formulario de inicio de sesión
+                  // Formulario
                   Card(
                     elevation: 8,
                     shape: RoundedRectangleBorder(
@@ -144,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 24),
 
-                            // Campo de Email
+                            // Email
                             TextFormField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -167,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 16),
 
-                            // Campo de Contraseña
+                            // Contraseña
                             TextFormField(
                               controller: _passwordController,
                               obscureText: _obscurePassword,
@@ -209,6 +212,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               isLoading: _isLoading,
                               icon: Icons.login,
                             ),
+                            const SizedBox(height: 16),
+
+                            // Botón Registrarse
+                            OutlinedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const RegisterScreen(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.person_add),
+                              label:
+                                  const Text('Crear cuenta de estudiante'),
+                              style: OutlinedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -216,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Información de usuarios de prueba
+                  // Info de usuarios de prueba
                   Card(
                     color: Colors.white.withOpacity(0.9),
                     child: Padding(
