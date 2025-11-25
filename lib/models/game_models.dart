@@ -1,37 +1,4 @@
-// Modelo para Juego
-class Juego {
-  final int idJuego;
-  final String nombre;
-  final String? descripcion;
-  final String tipoJuego;
-  final Map<String, dynamic>? configuracion;
-  final bool activo;
-  final DateTime fechaCreacion;
-
-  Juego({
-    required this.idJuego,
-    required this.nombre,
-    this.descripcion,
-    required this.tipoJuego,
-    this.configuracion,
-    required this.activo,
-    required this.fechaCreacion,
-  });
-
-  factory Juego.fromJson(Map<String, dynamic> json) {
-    return Juego(
-      idJuego: json['id_juego'],
-      nombre: json['nombre'],
-      descripcion: json['descripcion'],
-      tipoJuego: json['tipo_juego'],
-      configuracion: json['configuracion'],
-      activo: json['activo'] ?? true,
-      fechaCreacion: DateTime.parse(json['fecha_creacion']),
-    );
-  }
-}
-
-// Modelo para Palabra
+// Modelo para Palabra en Juegos
 class PalabraJuego {
   final int idPalabra;
   final String palabraInga;
@@ -39,14 +6,18 @@ class PalabraJuego {
   final String? categoria;
   final String? imagen;
   final String? audio;
+  final String traduccion;
+  final String? traduccionIngles;
 
   PalabraJuego({
     required this.idPalabra,
     required this.palabraInga,
     required this.traduccionEspanol,
+    required this.traduccion,
     this.categoria,
     this.imagen,
     this.audio,
+    this.traduccionIngles,
   });
 
   factory PalabraJuego.fromJson(Map<String, dynamic> json) {
@@ -57,6 +28,132 @@ class PalabraJuego {
       categoria: json['categoria'],
       imagen: json['imagen'],
       audio: json['audio'],
+      traduccion: json['traduccion'] ?? json['traduccion_espanol'] ?? '',
+      traduccionIngles: json['traduccion_ingles'],
+    );
+  }
+}
+
+// Modelo para imagen del juego Kawai Suti
+class PalabraImagenJuego {
+  final String? imagen;
+  final String palabraCorrecta;
+  final int idPalabraCorrecta;
+  final String traduccionCorrecta;
+  final List<OpcionPalabra> opciones;
+  final String categoria;
+
+  PalabraImagenJuego({
+    this.imagen,
+    required this.palabraCorrecta,
+    required this.idPalabraCorrecta,
+    required this.traduccionCorrecta,
+    required this.opciones,
+    required this.categoria,
+  });
+
+  factory PalabraImagenJuego.fromJson(Map<String, dynamic> json) {
+    return PalabraImagenJuego(
+      imagen: json['imagen'],
+      palabraCorrecta: json['palabra_correcta'] ?? '',
+      idPalabraCorrecta: json['id_palabra_correcta'] ?? 0,
+      traduccionCorrecta: json['traduccion_correcta'] ?? '',
+      opciones: (json['opciones'] as List?)
+          ?.map((o) => OpcionPalabra.fromJson(o))
+          .toList() ?? [],
+      categoria: json['categoria'] ?? '',
+    );
+  }
+}
+
+// Modelo para opciones del juego Kawai Suti
+class OpcionPalabra {
+  final int idPalabra;
+  final String palabraInga;
+  final String traduccionEspanol;
+  final String traduccionIngles;
+  final String traduccion;
+
+  OpcionPalabra({
+    required this.idPalabra,
+    required this.palabraInga,
+    required this.traduccionEspanol,
+    required this.traduccionIngles,
+    required this.traduccion,
+  });
+
+  factory OpcionPalabra.fromJson(Map<String, dynamic> json) {
+    return OpcionPalabra(
+      idPalabra: json['id_palabra'] ?? 0,
+      palabraInga: json['palabra_inga'] ?? '',
+      traduccionEspanol: json['traduccion_espanol'] ?? '',
+      traduccionIngles: json['traduccion_ingles'] ?? json['traduccion_espanol'] ?? '',
+      traduccion: json['traduccion'] ?? json['traduccion_espanol'] ?? '',
+    );
+  }
+}
+
+// Modelo para Opción en juegos de completar frases
+class OpcionOracion {
+  final String palabraInga;
+  final String traduccionEspanol;
+  final String traduccionIngles;
+  final String traduccion;
+  final bool esCorrecta;
+
+  OpcionOracion({
+    required this.palabraInga,
+    required this.traduccionEspanol,
+    required this.traduccionIngles,
+    required this.traduccion,
+    required this.esCorrecta,
+  });
+
+  factory OpcionOracion.fromJson(Map<String, dynamic> json) {
+    return OpcionOracion(
+      palabraInga: json['palabra_inga'] ?? '',
+      traduccionEspanol: json['traduccion_espanol'] ?? '',
+      traduccionIngles: json['traduccion_ingles'] ?? json['traduccion_espanol'] ?? '',
+      traduccion: json['traduccion'] ?? json['traduccion_espanol'] ?? '',
+      esCorrecta: json['es_correcta'] ?? false,
+    );
+  }
+}
+
+// Modelo para Oraciones en juegos
+class OracionJuego {
+  final int idOracion;
+  final String textoEspanol;
+  final String textoCompletoEspanol;
+  final String textoInga;
+  final String palabraCorrecta;
+  final String palabraCorrectaTraduccion;
+  final List<OpcionOracion> opciones;
+  final String categoria;
+
+  OracionJuego({
+    required this.idOracion,
+    required this.textoEspanol,
+    required this.textoCompletoEspanol,
+    required this.textoInga,
+    required this.palabraCorrecta,
+    required this.palabraCorrectaTraduccion,
+    required this.opciones,
+    required this.categoria,
+  });
+
+  factory OracionJuego.fromJson(Map<String, dynamic> json) {
+    return OracionJuego(
+      idOracion: json['id_oracion'] ?? 0,
+      textoEspanol: json['texto_espanol'] ?? '',
+      textoCompletoEspanol: json['texto_completo_espanol'] ?? '',
+      textoInga: json['texto_inga'] ?? '',
+      palabraCorrectaTraduccion: json['palabra_correcta_traduccion'] ?? '',
+      palabraCorrecta: json['palabra_correcta'] ?? '',
+      opciones: (json['opciones'] as List?)
+          ?.map((o) => OpcionOracion.fromJson(o))
+          .toList() ?? [],
+      categoria: json['categoria'] ?? '',
     );
   }
 }
@@ -121,6 +218,53 @@ class Partida {
       'id_leccion': idLeccion,
       'nivel_dificultad': nivelDificultad,
     };
+  }
+}
+
+// Modelo para Juego
+class Juego {
+  final int idJuego;
+  final String nombre;
+  final String? nombreIngles;
+  final String? descripcion;
+  final String? descripcionIngles;
+  final String tipoJuego;
+  final Map<String, dynamic>? configuracion;
+  final bool activo;
+  final DateTime fechaCreacion;
+
+  Juego({
+    required this.idJuego,
+    required this.nombre,
+    this.nombreIngles,
+    this.descripcion,
+    this.descripcionIngles,
+    required this.tipoJuego,
+    this.configuracion,
+    required this.activo,
+    required this.fechaCreacion,
+  });
+
+  factory Juego.fromJson(Map<String, dynamic> json) {
+    return Juego(
+      idJuego: json['id_juego'],
+      nombre: json['nombre'],
+      nombreIngles: json['nombre_ingles'],
+      descripcion: json['descripcion'],
+      descripcionIngles: json['descripcion_ingles'],
+      tipoJuego: json['tipo_juego'],
+      configuracion: json['configuracion'],
+      activo: json['activo'] ?? true,
+      fechaCreacion: DateTime.parse(json['fecha_creacion']),
+    );
+  }
+
+  String getNombre(String idioma) {
+    return idioma == 'en' && nombreIngles != null ? nombreIngles! : nombre;
+  }
+
+  String? getDescripcion(String idioma) {
+    return idioma == 'en' && descripcionIngles != null ? descripcionIngles : descripcion;
   }
 }
 
@@ -204,114 +348,5 @@ class FinalizarPartidaDto {
       'completado': completado,
       'detalles': detalles,
     };
-  }
-
-  
-}
-
-// Modelo para el juego de imágenes
-class PalabraImagenJuego {
-  final String? imagen;
-  final String palabraCorrecta;
-  final int idPalabraCorrecta;
-  final List<OpcionPalabra> opciones;
-  final String categoria;
-
-  PalabraImagenJuego({
-    this.imagen,
-    required this.palabraCorrecta,
-    required this.idPalabraCorrecta,
-    required this.opciones,
-    required this.categoria,
-  });
-
-  factory PalabraImagenJuego.fromJson(Map<String, dynamic> json) {
-    return PalabraImagenJuego(
-      imagen: json['imagen'],
-      palabraCorrecta: json['palabra_correcta'],
-      idPalabraCorrecta: json['id_palabra_correcta'],
-      opciones: (json['opciones'] as List)
-          .map((o) => OpcionPalabra.fromJson(o))
-          .toList(),
-      categoria: json['categoria'],
-    );
-  }
-}
-
-class OpcionPalabra {
-  final int idPalabra;
-  final String palabraInga;
-  final String traduccionEspanol;
-
-  OpcionPalabra({
-    required this.idPalabra,
-    required this.palabraInga,
-    required this.traduccionEspanol,
-  });
-
-  factory OpcionPalabra.fromJson(Map<String, dynamic> json) {
-    return OpcionPalabra(
-      idPalabra: json['id_palabra'],
-      palabraInga: json['palabra_inga'],
-      traduccionEspanol: json['traduccion_espanol'],
-    );
-  }
-}
-
-// Modelo para oraciones del juego
-class OracionJuego {
-  final int idOracion;
-  final String textoEspanol;  // Con hueco: "Yo _____ dos cerdos negros"
-  final String textoCompletoEspanol;
-  final String textoInga;
-  final String palabraCorrecta;
-  final String palabraCorrectaEspanol;
-  final List<OpcionOracion> opciones;
-  final String categoria;
-
-  OracionJuego({
-    required this.idOracion,
-    required this.textoEspanol,
-    required this.textoCompletoEspanol,
-    required this.textoInga,
-    required this.palabraCorrecta,
-    required this.palabraCorrectaEspanol,
-    required this.opciones,
-    required this.categoria,
-  });
-
-  factory OracionJuego.fromJson(Map<String, dynamic> json) {
-    return OracionJuego(
-      idOracion: json['id_oracion'],
-      textoEspanol: json['texto_espanol'],
-      textoCompletoEspanol: json['texto_completo_espanol'],
-      textoInga: json['texto_inga'],
-      palabraCorrecta: json['palabra_correcta'],
-      palabraCorrectaEspanol: json['palabra_correcta_espanol'],
-      opciones: (json['opciones'] as List)
-          .map((o) => OpcionOracion.fromJson(o))
-          .toList(),
-      categoria: json['categoria'],
-    );
-  }
-}
-
-class OpcionOracion {
-  final String palabraInga;
-  final String traduccionEspanol;
-  final bool esCorrecta;
-
-  OpcionOracion({
-    required this.palabraInga,
-    required this.traduccionEspanol,
-    required this.esCorrecta,
-  });
-
-  factory OpcionOracion.fromJson(Map<String, dynamic> json) {
-    return OpcionOracion(
-      palabraInga: json['palabra_inga'],
-      traduccionEspanol: json['traduccion_espanol'],
-      esCorrecta: json['es_correcta'] ?? false,
-    );
   }
 }

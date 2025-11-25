@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../models/game_models.dart';
 import '../../services/games_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class EmparejarPalabrasScreen extends StatefulWidget {
   final int idJuego;
@@ -39,6 +41,8 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
   Partida? _partidaActual;
   bool _isLoading = true;
   bool _juegoCompletado = false;
+
+  String _idiomaActual = 'es';
   
   late AnimationController _successController;
   late AnimationController _errorController;
@@ -54,9 +58,36 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _iniciarJuego();
+    // _iniciarJuego();
+     _inicializarJuego();  // ← CAMBIAR nombre del método
+  }
+  // ← NUEVO MÉTODO
+  Future<void> _inicializarJuego() async {
+    await _cargarIdioma();  // Primero cargar idioma
+    await _verificarIdioma();  // ← Debug
+    await _iniciarJuego();  // Luego iniciar juego
+  }
+  // ← AGREGAR ESTE MÉTODO
+  Future<void> _cargarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString('language_code') ?? 'es';
+    
+    setState(() {
+      _idiomaActual = languageCode;
+    });
+    
+    print('🌍 Idioma cargado: $_idiomaActual');
+    print('🔑 Clave usada: language_code');
   }
 
+  Future<void> _verificarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locale = prefs.getString('language_code');
+    print('🔍 DEBUG - Locale en SharedPreferences: $locale');
+    print('🔍 DEBUG - _idiomaActual en State: $_idiomaActual');
+  }
+
+  
   @override
   void dispose() {
     _timer?.cancel();
@@ -64,37 +95,6 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
     _errorController.dispose();
     super.dispose();
   }
-  /*
-  Future<void> _iniciarJuego() async {
-    try {
-      // Crear partida
-      _partidaActual = await widget.gamesService.crearPartida(
-        idJuego: widget.idJuego,
-        idLeccion: widget.idLeccion,
-        nivelDificultad: widget.nivelDificultad,
-      );
-
-      // Obtener palabras
-      final cantidad = _getCantidadPorDificultad();
-      _palabras = await widget.gamesService.obtenerPalabrasParaJuego(
-        idLeccion: widget.idLeccion,
-        cantidad: cantidad,
-      );
-
-      // Preparar columnas
-      _columnIzquierda = _palabras.map((p) => p.palabraInga).toList();
-      _columnDerecha = _palabras.map((p) => p.traduccionEspanol).toList()..shuffle();
-
-      // Iniciar cronómetro
-      _iniciarCronometro();
-
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      _mostrarError('Error al iniciar el juego: $e');
-    }
-  }*/
 
   Future<void> _iniciarJuego() async {
     try {
@@ -113,10 +113,12 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
       final cantidad = _getCantidadPorDificultad();
       print('📚 Obteniendo $cantidad palabras...');
       print('🔍 id_leccion: ${widget.idLeccion}');
+      print('🌍 idioma: $_idiomaActual');  // ← LOG
       
       _palabras = await widget.gamesService.obtenerPalabrasParaJuego(
         idLeccion: widget.idLeccion,
         cantidad: cantidad,
+        idioma: _idiomaActual,  // ← PASAR IDIOMA
       );
       print('✅ Palabras obtenidas: ${_palabras.length}');
 

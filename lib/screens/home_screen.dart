@@ -741,6 +741,7 @@ import 'ai_assistant_screen.dart';
 import 'vocabulario_screen.dart';
 import 'settings_screen.dart';
 import 'games/games_list_screen.dart';
+import 'admin/gestionar_oraciones_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -756,16 +757,23 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   Map<String, dynamic>? _userData;
   String? _userRole;
-  String _currentLocale = 'es';
+  // String _currentLocale = 'es';
   String? _token;
 
   late final List<Widget> _screens; // Se asignará después de inicializar _gamesService
+
+  String get _currentLocale {
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    return settings.locale.languageCode;
+  }
+
+
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
-    _loadLocale();
+    // _loadLocale();
     _initializeScreens(); // Inicializamos pantallas async
   }
 
@@ -799,12 +807,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _loadLocale() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _currentLocale = prefs.getString('locale') ?? 'es';
-    });
-  }
+  // Future<void> _loadLocale() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     _currentLocale = prefs.getString('locale') ?? 'es';
+  //   });
+  // }
+
+  // Future<void> _changeLanguage(String locale) async {
+  //   final settings = Provider.of<SettingsProvider>(context, listen: false);
+  //   await settings.changeLocale(locale);
+  //   Fluttertoast.showToast(
+  //     msg: AppLocalizations.of(context)?.languageChanged ?? 'Idioma cambiado',
+  //     backgroundColor: Colors.green,
+  //   );
+  // }
 
   Future<void> _changeLanguage(String locale) async {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
@@ -947,6 +964,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             accountEmail: Text(_userData?['email'] ?? ''),
           ),
+
           ListTile(
             leading: const Icon(Icons.book),
             title: Text(loc?.words ?? 'Palabras'),
@@ -995,7 +1013,9 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() => _currentIndex = 5);
             },
           ),
+
           const Divider(),
+
           ExpansionTile(
             leading: const Icon(Icons.language),
             title: Text(loc?.language ?? 'Idioma'),
@@ -1029,7 +1049,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+
           const Divider(),
+
           ListTile(
             leading: const Icon(Icons.info),
             title: Text(loc?.about ?? 'Acerca de'),
@@ -1042,11 +1064,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 applicationIcon: const Icon(Icons.language, size: 48),
                 children: const [
                   Text(
-                      'Plataforma educativa para la documentación y difusión de la lengua Inga'),
+                    'Plataforma educativa para la documentación y difusión de la lengua Inga',
+                  ),
                 ],
               );
             },
           ),
+
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text(loc?.settings ?? 'Ajustes'),
@@ -1058,7 +1082,9 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+
           const Divider(),
+
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: Text(
@@ -1067,10 +1093,205 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onTap: _handleLogout,
           ),
+
+          // ⬇️ BLOQUE PARA ADMIN DENTRO DEL CHILDREN
+          if (_userRole == 'Administrador') ...[
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.edit_note),
+              title: const Text('Gestionar Oraciones'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GestionarOracionesScreen(
+                      gamesService: _gamesService!,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+          // ⬆️ FIN BLOQUE ADMIN
         ],
       ),
     );
-  }
+}
+
+
+  // Widget _buildDrawer(AppLocalizations? loc, SettingsProvider settings) {
+  //   return Drawer(
+  //     child: ListView(
+  //       padding: EdgeInsets.zero,
+  //       children: [
+  //         UserAccountsDrawerHeader(
+  //           decoration: const BoxDecoration(
+  //             gradient: LinearGradient(
+  //               colors: [Colors.indigo, Colors.indigoAccent],
+  //             ),
+  //           ),
+  //           currentAccountPicture: CircleAvatar(
+  //             backgroundColor: Colors.white,
+  //             child: Icon(
+  //               _getRoleIcon(),
+  //               size: 40,
+  //               color: Colors.indigo,
+  //             ),
+  //           ),
+  //           accountName: Text(
+  //             _userData?['nombre'] ?? 'Usuario',
+  //             style: const TextStyle(fontWeight: FontWeight.bold),
+  //           ),
+  //           accountEmail: Text(_userData?['email'] ?? ''),
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.book),
+  //           title: Text(loc?.words ?? 'Palabras'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 0);
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.school),
+  //           title: Text(loc?.lessons ?? 'Lecciones'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 1);
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.videogame_asset),
+  //           title: Text(loc?.games ?? 'Juegos'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 2);
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.psychology),
+  //           title: Text(loc?.aiAssistant ?? 'Asistente IA'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 3);
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.library_books),
+  //           title: Text(loc?.vocabulary ?? 'Vocabulario'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 4);
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.person),
+  //           title: Text(loc?.profile ?? 'Perfil'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             setState(() => _currentIndex = 5);
+  //           },
+  //         ),
+  //         const Divider(),
+  //         ExpansionTile(
+  //           leading: const Icon(Icons.language),
+  //           title: Text(loc?.language ?? 'Idioma'),
+  //           children: [
+  //             RadioListTile<String>(
+  //               title: const Text('Español'),
+  //               value: 'es',
+  //               groupValue: _currentLocale,
+  //               onChanged: (value) {
+  //                 if (value != null) _changeLanguage(value);
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //             RadioListTile<String>(
+  //               title: const Text('English'),
+  //               value: 'en',
+  //               groupValue: _currentLocale,
+  //               onChanged: (value) {
+  //                 if (value != null) _changeLanguage(value);
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //             RadioListTile<String>(
+  //               title: const Text('Inga Shimi'),
+  //               value: 'inga',
+  //               groupValue: _currentLocale,
+  //               onChanged: (value) {
+  //                 if (value != null) _changeLanguage(value);
+  //                 Navigator.pop(context);
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //         const Divider(),
+  //         ListTile(
+  //           leading: const Icon(Icons.info),
+  //           title: Text(loc?.about ?? 'Acerca de'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             showAboutDialog(
+  //               context: context,
+  //               applicationName: loc?.appTitle ?? 'Lengua Inga',
+  //               applicationVersion: '1.0.0',
+  //               applicationIcon: const Icon(Icons.language, size: 48),
+  //               children: const [
+  //                 Text(
+  //                     'Plataforma educativa para la documentación y difusión de la lengua Inga'),
+  //               ],
+  //             );
+  //           },
+  //         ),
+  //         ListTile(
+  //           leading: const Icon(Icons.settings),
+  //           title: Text(loc?.settings ?? 'Ajustes'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(builder: (_) => const SettingsScreen()),
+  //             );
+  //           },
+  //         ),
+  //         const Divider(),
+  //         ListTile(
+  //           leading: const Icon(Icons.logout, color: Colors.red),
+  //           title: Text(
+  //             loc?.logout ?? 'Cerrar Sesión',
+  //             style: const TextStyle(color: Colors.red),
+  //           ),
+  //           onTap: _handleLogout,
+  //         ),
+  //       ],
+        
+  //     ),
+      
+  //     // ⬇️ AQUI PEGAS EL BLOQUE PARA ADMINISTRADORES
+  //       if (_userRole == 'Administrador') ...[
+  //         const Divider(),
+  //         ListTile(
+  //           leading: const Icon(Icons.edit_note),
+  //           title: const Text('Gestionar Oraciones'),
+  //           onTap: () {
+  //             Navigator.pop(context);
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                 builder: (context) => GestionarOracionesScreen(
+  //                   gamesService: _gamesService!,
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ],  
+  //       // ⬆️ ESTO VA AQUÍ
+  //   );
+    
+  // }
 
   Color _getRoleColor() {
     switch (_userRole) {

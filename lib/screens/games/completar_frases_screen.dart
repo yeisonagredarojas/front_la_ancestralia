@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../models/game_models.dart';
 import '../../services/games_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class CompletarFrasesScreen extends StatefulWidget {
   final int idJuego;
@@ -34,6 +36,9 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
   bool _isLoading = true;
   bool _juegoCompletado = false;
   bool _mostrandoFeedback = false;
+
+  String _idiomaActual = 'es';  // ← AGREGAR
+
   
   late AnimationController _successController;
   late AnimationController _errorController;
@@ -49,7 +54,34 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _iniciarJuego();
+    // _iniciarJuego();
+    _inicializarJuego();  // ← CAMBIAR
+
+  }
+
+  // ← NUEVO MÉTODO
+  Future<void> _inicializarJuego() async {
+    await _cargarIdioma();
+    await _verificarIdioma();  // ← Debug
+    await _iniciarJuego();
+  }
+
+  // ← AGREGAR
+  Future<void> _cargarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // _idiomaActual = prefs.getString('locale') ?? 'es';
+      _idiomaActual = prefs.getString('language_code') ?? 'es';
+
+    });
+    print('🌍 Idioma cargado en Completar Frases: $_idiomaActual');
+  }
+
+  Future<void> _verificarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locale = prefs.getString('locale');
+    print('🔍 DEBUG - Locale en SharedPreferences: $locale');
+    print('🔍 DEBUG - _idiomaActual en State: $_idiomaActual');
   }
 
   @override
@@ -70,12 +102,17 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
       );
 
       final cantidad = _getCantidadPorDificultad();
+      print('🌍 Idioma: $_idiomaActual');  // ← LOG
+
       _oraciones = await widget.gamesService.obtenerOracionesParaJuego(
         nivelDificultad: widget.nivelDificultad,
         cantidad: cantidad,
+        idioma: _idiomaActual,  // ← PASAR IDIOMA
+
       );
 
       print('✅ Oraciones obtenidas: ${_oraciones.length}');
+      print('📝 Primera oración: ${_oraciones.first.textoEspanol}');  // ← LOG
 
       _iniciarCronometro();
 
@@ -538,6 +575,10 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
   }
 
   Widget _buildBotonOpcion(int index, OracionJuego oracionActual) {
+    if (index >= oracionActual.opciones.length) {
+      return const SizedBox();
+    }
+
     final opcion = oracionActual.opciones[index];
     final isSelected = _opcionSeleccionada == index;
     final isCorrect = opcion.palabraInga == oracionActual.palabraCorrecta;

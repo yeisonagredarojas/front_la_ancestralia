@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../models/game_models.dart';
 import '../../services/games_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KawaiSutiScreen extends StatefulWidget {
   final int idJuego;
@@ -36,6 +37,8 @@ class _KawaiSutiScreenState extends State<KawaiSutiScreen> with TickerProviderSt
   bool _isLoading = true;
   bool _juegoCompletado = false;
   bool _mostrandoFeedback = false;
+  String _idiomaActual = 'es';  // ← AGREGAR
+
   
   late AnimationController _successController;
   late AnimationController _errorController;
@@ -56,7 +59,31 @@ class _KawaiSutiScreenState extends State<KawaiSutiScreen> with TickerProviderSt
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _iniciarJuego();
+    // _iniciarJuego();
+    _inicializarJuego();  // ← CAMBIAR
+  }
+  // ← NUEVO MÉTODO
+  Future<void> _inicializarJuego() async {
+    await _cargarIdioma();
+    await _verificarIdioma();  // ← Debug
+    await _iniciarJuego();
+  }
+
+  // ← AGREGAR
+  Future<void> _cargarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // _idiomaActual = prefs.getString('locale') ?? 'es';
+      _idiomaActual = prefs.getString('language_code') ?? 'es';
+    });
+    print('🌍 Idioma cargado en Kawai Suti: $_idiomaActual');
+  }
+
+  Future<void> _verificarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locale = prefs.getString('language_code');
+    print('🔍 DEBUG - Locale en SharedPreferences: $locale');
+    print('🔍 DEBUG - _idiomaActual en State: $_idiomaActual');
   }
 
   @override
@@ -68,44 +95,10 @@ class _KawaiSutiScreenState extends State<KawaiSutiScreen> with TickerProviderSt
     super.dispose();
   }
 
-  // Future<void> _iniciarJuego() async {
-  //   try {
-  //     print('🎮 Iniciando Kawai Suti...');
-      
-  //     // Crear partida
-  //     _partidaActual = await widget.gamesService.crearPartida(
-  //       idJuego: widget.idJuego,
-  //       nivelDificultad: widget.nivelDificultad,
-  //     );
-
-  //     // Obtener palabras de la categoría
-  //     final cantidad = _getCantidadPorDificultad();
-  //     _palabras = await widget.gamesService.obtenerPalabrasPorCategoria(
-  //       categoria: widget.categoria,
-  //       cantidad: cantidad,
-  //       soloConImagen: false,
-  //     );
-
-  //     print('✅ Palabras obtenidas: ${_palabras.length}');
-
-  //     // Iniciar cronómetro
-  //     _iniciarCronometro();
-
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-      
-  //     _imageController.forward();
-  //   } catch (e) {
-  //     print('❌ Error: $e');
-  //     _mostrarError('Error al iniciar el juego: $e');
-  //   }
-  // }
-
   Future<void> _iniciarJuego() async {
     try {
-      print('🎮 Iniciando Kawai Suti...');
-      
+      print('🎮 Iniciando Kawai Sutii..');
+      print('📌 Categoría recibida por el juego: ${widget.categoria}');
       // Crear partida
       _partidaActual = await widget.gamesService.crearPartida(
         idJuego: widget.idJuego,
@@ -114,14 +107,17 @@ class _KawaiSutiScreenState extends State<KawaiSutiScreen> with TickerProviderSt
 
       // Obtener palabras de la categoría
       final cantidad = _getCantidadPorDificultad();
+      print('📚 Obteniendo $cantidad palabras de categoría: ${widget.categoria}');
+      print('🌍 Idioma: $_idiomaActual');  // ← LOG
       _palabras = await widget.gamesService.obtenerPalabrasPorCategoria(
         categoria: widget.categoria,
         cantidad: cantidad,
         soloConImagen: false,
+        idioma: _idiomaActual,  // ← PASAR IDIOMA
       );
 
       print('✅ Palabras obtenidas: ${_palabras.length}');
-
+      print('📝 Primera palabra traducción: ${_palabras.first.traduccionCorrecta}');  // ← LOG
       // Iniciar cronómetro
       _iniciarCronometro();
 
@@ -775,38 +771,174 @@ class _KawaiSutiScreenState extends State<KawaiSutiScreen> with TickerProviderSt
 
     return FadeTransition(
       opacity: _imageController,
-      child: Container(
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+      child: Column(
+        children: [
+          // Texto sobre la imagen
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              palabraActual.traduccionCorrecta,  // ← Usar traduccionCorrecta
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ],
-        ),
-        child: tieneImagen
-            ? ClipRRect(
+          ),
+          // Imagen
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  palabraActual.imagen!,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return _buildPlaceholder();
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-              )
-            : _buildPlaceholder(),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: tieneImagen
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.network(
+                        palabraActual.imagen!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildPlaceholder();
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(child: CircularProgressIndicator());
+                        },
+                      ),
+                    )
+                  : _buildPlaceholder(),
+            ),
+          ),
+        ],
       ),
     );
   }
+  // Widget _buildImagenArea() {
+  //   if (_palabras.isEmpty) return const SizedBox();
+    
+  //   final palabraActual = _palabras[_indiceActual];
+  //   final tieneImagen = palabraActual.imagen != null && palabraActual.imagen!.isNotEmpty;
+
+  //   return FutureBuilder<String>(
+  //     future: _obtenerIdiomaActual(),
+  //     builder: (context, snapshot) {
+  //       final idioma = snapshot.data ?? 'es';
+  //       final textoMostrar = idioma == 'en' 
+  //           ? (palabraActual.traduccionIngles ?? palabraActual.traduccionEspanol)
+  //           : palabraActual.traduccionEspanol;
+
+  //       return FadeTransition(
+  //         opacity: _imageController,
+  //         child: Column(
+  //           children: [
+  //             // ← AGREGAR TEXTO AQUÍ
+  //             Container(
+  //               padding: const EdgeInsets.all(16),
+  //               child: Text(
+  //                 textoMostrar,
+  //                 style: const TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.indigo,
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //             // Imagen
+  //             Expanded(
+  //               child: Container(
+  //                 margin: const EdgeInsets.symmetric(horizontal: 16),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.grey.shade200,
+  //                   borderRadius: BorderRadius.circular(16),
+  //                   boxShadow: [
+  //                     BoxShadow(
+  //                       color: Colors.black.withOpacity(0.1),
+  //                       blurRadius: 10,
+  //                       offset: const Offset(0, 4),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 child: tieneImagen
+  //                     ? ClipRRect(
+  //                         borderRadius: BorderRadius.circular(16),
+  //                         child: Image.network(
+  //                           palabraActual.imagen!,
+  //                           fit: BoxFit.contain,
+  //                           errorBuilder: (context, error, stackTrace) {
+  //                             return _buildPlaceholder();
+  //                           },
+  //                           loadingBuilder: (context, child, loadingProgress) {
+  //                             if (loadingProgress == null) return child;
+  //                             return const Center(child: CircularProgressIndicator());
+  //                           },
+  //                         ),
+  //                       )
+  //                     : _buildPlaceholder(),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Future<String> _obtenerIdiomaActual() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('locale') ?? 'es';
+  }
+
+  // Widget _buildImagenArea() {
+  //   if (_palabras.isEmpty) return const SizedBox();
+    
+  //   final palabraActual = _palabras[_indiceActual];
+  //   final tieneImagen = palabraActual.imagen != null && palabraActual.imagen!.isNotEmpty;
+
+  //   return FadeTransition(
+  //     opacity: _imageController,
+  //     child: Container(
+  //       margin: const EdgeInsets.all(16),
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey.shade200,
+  //         borderRadius: BorderRadius.circular(16),
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.black.withOpacity(0.1),
+  //             blurRadius: 10,
+  //             offset: const Offset(0, 4),
+  //           ),
+  //         ],
+  //       ),
+  //       child: tieneImagen
+  //           ? ClipRRect(
+  //               borderRadius: BorderRadius.circular(16),
+  //               child: Image.network(
+  //                 palabraActual.imagen!,
+  //                 fit: BoxFit.contain,
+  //                 errorBuilder: (context, error, stackTrace) {
+  //                   return _buildPlaceholder();
+  //                 },
+  //                 loadingBuilder: (context, child, loadingProgress) {
+  //                   if (loadingProgress == null) return child;
+  //                   return const Center(child: CircularProgressIndicator());
+  //                 },
+  //               ),
+  //             )
+  //           : _buildPlaceholder(),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPlaceholder() {
     return Center(

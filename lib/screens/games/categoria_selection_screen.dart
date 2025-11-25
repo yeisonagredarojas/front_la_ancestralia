@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/games_service.dart';
 import 'kawai_suti_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoriaSelectionScreen extends StatefulWidget {
   final int idJuego;
@@ -22,16 +23,40 @@ class _CategoriaSelectionScreenState extends State<CategoriaSelectionScreen> {
   List<String> _categorias = [];
   bool _isLoading = true;
   String? _error;
+  String _idiomaActual = 'es';  // ← AGREGAR
+
 
   @override
   void initState() {
     super.initState();
-    _cargarCategorias();
+    // _cargarCategorias();
+    _inicializar();  // ← CAMBIAR
+  }
+
+  // ← NUEVO MÉTODO
+  Future<void> _inicializar() async {
+    await _cargarIdioma();
+    await _cargarCategorias();
+  }
+
+  // ← AGREGAR
+  Future<void> _cargarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _idiomaActual = prefs.getString('locale') ?? 'es';
+    });
+    print('🌍 Idioma cargado en Categorías: $_idiomaActual');
   }
 
   Future<void> _cargarCategorias() async {
     try {
-      final categorias = await widget.gamesService.obtenerCategorias();
+      print('📂 Cargando categorías en idioma: $_idiomaActual');
+      final categorias = await widget.gamesService.obtenerCategorias(
+        idioma: _idiomaActual,  // ← PASAR IDIOMA
+      );
+
+      print('✅ Categorías obtenidas: $categorias');    
+
       setState(() {
         _categorias = categorias;
         _isLoading = false;

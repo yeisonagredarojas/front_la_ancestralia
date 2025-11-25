@@ -38,12 +38,25 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   /// Cambiar el idioma de la app
+  // Future<void> changeLocale(String languageCode) async {
+  //   _locale = Locale(languageCode, '');
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('language_code', languageCode);
+  //   notifyListeners();
+  // }
+
   Future<void> changeLocale(String languageCode) async {
-    _locale = Locale(languageCode, '');
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language_code', languageCode);
+    
+    _locale = Locale(languageCode, '');
     notifyListeners();
+    
+    print('💾 Idioma guardado en SettingsProvider');
+    print('🔑 Clave: language_code');
+    print('📝 Valor: $languageCode');
   }
+
 
   /// Cambiar el modo de tema
   Future<void> changeTheme(AppThemeMode mode) async {

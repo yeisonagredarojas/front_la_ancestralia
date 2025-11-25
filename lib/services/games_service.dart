@@ -181,6 +181,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/game_models.dart';
 import '../config/api_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GamesService {
   final String? token;
@@ -247,17 +248,24 @@ class GamesService {
   }
 
   // Obtener palabras para el juego
+  // Obtener palabras con idioma
   Future<List<PalabraJuego>> obtenerPalabrasParaJuego({
     int? idLeccion,
     int cantidad = 6,
+    String idioma = 'es',
   }) async {
-    final queryParams = {
-      if (idLeccion != null) 'id_leccion': idLeccion.toString(),
-      'cantidad': cantidad.toString(),
-    };
+    final Map<String, String> queryParams = {};
+    
+    if (idLeccion != null) {
+      queryParams['id_leccion'] = idLeccion.toString();
+    }
+    queryParams['cantidad'] = cantidad.toString();
+    queryParams['idioma'] = idioma;  // ← AGREGAR
 
     final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesPalabras}')
         .replace(queryParameters: queryParams);
+
+    print('🔗 URL: $uri');  // ← LOG para debug
 
     final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
 
@@ -268,6 +276,27 @@ class GamesService {
       throw Exception('Error al obtener palabras: ${response.statusCode}');
     }
   }
+  // Future<List<PalabraJuego>> obtenerPalabrasParaJuego({
+  //   int? idLeccion,
+  //   int cantidad = 6,
+  // }) async {
+  //   final queryParams = {
+  //     if (idLeccion != null) 'id_leccion': idLeccion.toString(),
+  //     'cantidad': cantidad.toString(),
+  //   };
+
+  //   final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesPalabras}')
+  //       .replace(queryParameters: queryParams);
+
+  //   final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
+
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body);
+  //     return data.map((json) => PalabraJuego.fromJson(json)).toList();
+  //   } else {
+  //     throw Exception('Error al obtener palabras: ${response.statusCode}');
+  //   }
+  // }
 
   // Finalizar una partida
   // Future<Map<String, dynamic>> finalizarPartida(
@@ -375,12 +404,14 @@ class GamesService {
   }
 
 
-  // Obtener categorías disponibles
-  Future<List<String>> obtenerCategorias() async {
-    final response = await http.get(
-      Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesCategorias}'),
-      headers: _headers,
-    ).timeout(ApiConfig.timeout);
+  // Obtener categorías disponibles con idioma
+  Future<List<String>> obtenerCategorias({String idioma = 'es'}) async {
+    final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesCategorias}')
+        .replace(queryParameters: {'idioma': idioma});
+
+    print('🔗 URL categorías: $uri');  // ← LOG
+
+    final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -389,23 +420,46 @@ class GamesService {
       throw Exception('Error al obtener categorías: ${response.statusCode}');
     }
   }
+  // Future<List<String>> obtenerCategorias() async {
+  //   final response = await http.get(
+  //     Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesCategorias}'),
+  //     headers: _headers,
+  //   ).timeout(ApiConfig.timeout);
+
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body);
+  //     return data.cast<String>();
+  //   } else {
+  //     throw Exception('Error al obtener categorías: ${response.statusCode}');
+  //   }
+  // }
 
   // Obtener palabras por categoría para juego de imágenes
   Future<List<PalabraImagenJuego>> obtenerPalabrasPorCategoria({
     required String categoria,
     int cantidad = 6,
     bool soloConImagen = true,
+    String idioma = 'es'
   }) async {
     final queryParams = {
       'cantidad': cantidad.toString(),
       'solo_con_imagen': soloConImagen.toString(),
+      'idioma': idioma,
     };
 
     final uri = Uri.parse(
       '${ApiConfig.baseUrl}${ApiConfig.gamesPalabrasCategoria}/$categoria',
     ).replace(queryParameters: queryParams);
 
+    
+
+    print('🔗 URL palabras categoría: $uri');  // ← LOG                     // 👈 Print 1
+    print('📤 Headers: $_headers'); 
+
     final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
+
+    print('📥 Respuesta del backend: ${response.body}'); // 👈 Print 2
+    print('📊 Status code: ${response.statusCode}');  
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -416,17 +470,22 @@ class GamesService {
   }
 
   // Obtener oraciones para completar frases
+  // Obtener oraciones con idioma
   Future<List<OracionJuego>> obtenerOracionesParaJuego({
     String nivelDificultad = 'medio',
     int cantidad = 6,
+    String idioma = 'es',
   }) async {
     final queryParams = {
       'nivel_dificultad': nivelDificultad,
       'cantidad': cantidad.toString(),
+      'idioma': idioma,  // ← AGREGAR
     };
 
     final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}')
         .replace(queryParameters: queryParams);
+
+    print('🔗 URL oraciones: $uri');  // ← LOG
 
     final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
 
@@ -436,5 +495,70 @@ class GamesService {
     } else {
       throw Exception('Error al obtener oraciones: ${response.statusCode}');
     }
+  }
+
+  // Future<List<OracionJuego>> obtenerOracionesParaJuego({
+  //   String nivelDificultad = 'medio',
+  //   int cantidad = 6,
+  // }) async {
+  //   final queryParams = {
+  //     'nivel_dificultad': nivelDificultad,
+  //     'cantidad': cantidad.toString(),
+  //   };
+
+  //   final uri = Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}')
+  //       .replace(queryParameters: queryParams);
+
+  //   final response = await http.get(uri, headers: _headers).timeout(ApiConfig.timeout);
+
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body);
+  //     return data.map((json) => OracionJuego.fromJson(json)).toList();
+  //   } else {
+  //     throw Exception('Error al obtener oraciones: ${response.statusCode}');
+  //   }
+  //}
+  // CRUD de oraciones
+  Future<Map<String, dynamic>> crearOracion(Map<String, dynamic> oracionData) async {
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}'),
+      headers: _headers,
+      body: json.encode(oracionData),
+    ).timeout(ApiConfig.timeout);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Error al crear oración: ${response.statusCode}');
+    }
+  }
+
+  Future<void> eliminarOracion(int idOracion) async {
+    final response = await http.delete(
+      Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}/$idOracion'),
+      headers: _headers,
+    ).timeout(ApiConfig.timeout);
+
+    if (response.statusCode != 200) {
+      throw Exception('Error al eliminar oración: ${response.statusCode}');
+    }
+  }
+
+  Future<List<dynamic>> listarOraciones() async {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}${ApiConfig.gamesOraciones}/todas'),
+      headers: _headers,
+    ).timeout(ApiConfig.timeout);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Error al listar oraciones: ${response.statusCode}');
+    }
+  }
+
+  Future<String> _obtenerIdiomaActual() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('locale') ?? 'es';
   }
 }
