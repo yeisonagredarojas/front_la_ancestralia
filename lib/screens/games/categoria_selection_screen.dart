@@ -36,6 +36,7 @@ class _CategoriaSelectionScreenState extends State<CategoriaSelectionScreen> {
   // ← NUEVO MÉTODO
   Future<void> _inicializar() async {
     await _cargarIdioma();
+    await _verificarIdioma();  // ← Debug
     await _cargarCategorias();
   }
 
@@ -43,7 +44,8 @@ class _CategoriaSelectionScreenState extends State<CategoriaSelectionScreen> {
   Future<void> _cargarIdioma() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _idiomaActual = prefs.getString('locale') ?? 'es';
+      // _idiomaActual = prefs.getString('local') ?? 'es';
+      _idiomaActual = prefs.getString('language_code') ?? 'es';
     });
     print('🌍 Idioma cargado en Categorías: $_idiomaActual');
   }
@@ -68,6 +70,14 @@ class _CategoriaSelectionScreenState extends State<CategoriaSelectionScreen> {
       });
     }
   }
+
+  Future<void> _verificarIdioma() async {
+    final prefs = await SharedPreferences.getInstance();
+    final locale = prefs.getString('language_code');
+    print('🔍 DEBUG - Locale en SharedPreferences: $locale');
+    print('🔍 DEBUG - _idiomaActual en State: $_idiomaActual');
+  }
+
 
   Color _getCategoriaColor(int index) {
     final colors = [

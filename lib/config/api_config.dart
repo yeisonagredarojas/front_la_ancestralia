@@ -1,6 +1,6 @@
 class ApiConfig {
   // URL base del backend
-  //static const String baseUrl = 'http://10.0.2.2:3000'; // Para Android Emulator
+  // static const String baseUrl = 'http://10.0.2.2:3000'; // Para Android Emulator
   static const String baseUrl = 'http://localhost:3000'; // Para Web/Desktop
   // static const String baseUrl = 'http://192.168.1.X:3000'; // Para dispositivo físico
   

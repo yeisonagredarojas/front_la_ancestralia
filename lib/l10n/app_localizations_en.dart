@@ -599,4 +599,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exampleCardInfo => 'This is a preview of the current theme';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get play_again => 'Play again';
+
+  @override
+  String get game_completed_title => 'Game Completed! 🎉';
+
+  @override
+  String get score_label => 'Score';
+
+  @override
+  String get correct_label => 'Correct';
+
+  @override
+  String get wrong_label => 'Wrong';
+
+  @override
+  String get time_label => 'Time';
 }

@@ -597,4 +597,25 @@ class AppLocalizationsQu extends AppLocalizations {
 
   @override
   String get exampleCardInfo => 'Esta es una vista previa del tema actual';
+
+  @override
+  String get exit => 'Salir';
+
+  @override
+  String get play_again => 'Jugar de nuevo';
+
+  @override
+  String get game_completed_title => '¡Juego Completado! 🎉';
+
+  @override
+  String get score_label => 'Puntuación';
+
+  @override
+  String get correct_label => 'Aciertos';
+
+  @override
+  String get wrong_label => 'Errores';
+
+  @override
+  String get time_label => 'Tiempo';
 }

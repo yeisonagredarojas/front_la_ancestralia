@@ -1215,6 +1215,48 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Esta es una vista previa del tema actual'**
   String get exampleCardInfo;
+
+  /// No description provided for @exit.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir'**
+  String get exit;
+
+  /// No description provided for @play_again.
+  ///
+  /// In es, this message translates to:
+  /// **'Jugar de nuevo'**
+  String get play_again;
+
+  /// No description provided for @game_completed_title.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Juego Completado! 🎉'**
+  String get game_completed_title;
+
+  /// No description provided for @score_label.
+  ///
+  /// In es, this message translates to:
+  /// **'Puntuación'**
+  String get score_label;
+
+  /// No description provided for @correct_label.
+  ///
+  /// In es, this message translates to:
+  /// **'Aciertos'**
+  String get correct_label;
+
+  /// No description provided for @wrong_label.
+  ///
+  /// In es, this message translates to:
+  /// **'Errores'**
+  String get wrong_label;
+
+  /// No description provided for @time_label.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiempo'**
+  String get time_label;
 }
 
 class _AppLocalizationsDelegate

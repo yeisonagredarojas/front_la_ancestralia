@@ -79,8 +79,8 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
 
   Future<void> _verificarIdioma() async {
     final prefs = await SharedPreferences.getInstance();
-    final locale = prefs.getString('locale');
-    print('🔍 DEBUG - Locale en SharedPreferences: $locale');
+    // final locale = prefs.getString('locale');
+    // print('🔍 DEBUG - Locale en SharedPreferences: $locale');
     print('🔍 DEBUG - _idiomaActual en State: $_idiomaActual');
   }
 
@@ -111,8 +111,10 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
 
       );
 
+      
+
       print('✅ Oraciones obtenidas: ${_oraciones.length}');
-      print('📝 Primera oración: ${_oraciones.first.textoEspanol}');  // ← LOG
+      print('📝 Primera oración: ${_oraciones.first.texto}');  // ← LOG
 
       _iniciarCronometro();
 
@@ -533,7 +535,7 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
             ),
             const SizedBox(height: 16),
             Text(
-              oracionActual.textoEspanol,
+              oracionActual.texto,
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -667,7 +669,8 @@ class _CompletarFrasesScreenState extends State<CompletarFrasesScreen> with Tick
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          opcion.traduccionEspanol,
+                          // opcion.traduccionEspanol,
+                          opcion.traduccion,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade600,

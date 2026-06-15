@@ -202,5 +202,12 @@
   "toastThemeChanged": "Theme changed to {name}",
   "exampleCardTitle": "Example Card",
   "exampleCardSubtitle": "This is how the selected theme looks",
-  "exampleCardInfo": "This is a preview of the current theme"
+  "exampleCardInfo": "This is a preview of the current theme",
+  "exit": "Exit",
+  "play_again": "Play again",
+  "game_completed_title": "Game Completed! 🎉",
+  "score_label": "Score",
+  "correct_label": "Correct",
+  "wrong_label": "Wrong",
+  "time_label": "Time"
 }

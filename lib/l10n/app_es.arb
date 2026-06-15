@@ -204,5 +204,12 @@
   "toastThemeChanged": "Tema cambiado a {name}",
   "exampleCardTitle": "Ejemplo de Tarjeta",
   "exampleCardSubtitle": "Así se ve el tema seleccionado",
-  "exampleCardInfo": "Esta es una vista previa del tema actual"
+  "exampleCardInfo": "Esta es una vista previa del tema actual",
+  "exit": "Salir",
+  "play_again": "Jugar de nuevo",
+  "game_completed_title": "¡Juego Completado! 🎉",
+  "score_label": "Puntuación",
+  "correct_label": "Aciertos",
+  "wrong_label": "Errores",
+  "time_label": "Tiempo"
 }

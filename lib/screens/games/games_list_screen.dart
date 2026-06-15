@@ -28,29 +28,6 @@ class _GamesListScreenState extends State<GamesListScreen> {
     super.initState();
     _cargarDatos();
   }
-  /*
-  Future<void> _cargarDatos() async {
-    try {
-      setState(() {
-        _isLoading = true;
-        _error = null;
-      });
-
-      final juegos = await widget.gamesService.obtenerJuegos();
-      final progresos = await widget.gamesService.obtenerProgreso();
-
-      setState(() {
-        _juegos = juegos;
-        _progresos = progresos is List<ProgresoJuego> ? progresos : [];
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _error = 'Error al cargar los juegos: $e';
-        _isLoading = false;
-      });
-    }
-  }*/
 
   Future<void> _cargarDatos() async {
     try {

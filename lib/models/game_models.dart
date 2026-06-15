@@ -123,7 +123,7 @@ class OpcionOracion {
 // Modelo para Oraciones en juegos
 class OracionJuego {
   final int idOracion;
-  final String textoEspanol;
+  final String texto;
   final String textoCompletoEspanol;
   final String textoInga;
   final String palabraCorrecta;
@@ -133,7 +133,7 @@ class OracionJuego {
 
   OracionJuego({
     required this.idOracion,
-    required this.textoEspanol,
+    required this.texto,
     required this.textoCompletoEspanol,
     required this.textoInga,
     required this.palabraCorrecta,
@@ -145,7 +145,8 @@ class OracionJuego {
   factory OracionJuego.fromJson(Map<String, dynamic> json) {
     return OracionJuego(
       idOracion: json['id_oracion'] ?? 0,
-      textoEspanol: json['texto_espanol'] ?? '',
+      // textoEspanol: json['texto_espanol'] ?? '',
+      texto: json['texto'] ?? '',
       textoCompletoEspanol: json['texto_completo_espanol'] ?? '',
       textoInga: json['texto_inga'] ?? '',
       palabraCorrectaTraduccion: json['palabra_correcta_traduccion'] ?? '',
@@ -349,4 +350,6 @@ class FinalizarPartidaDto {
       'detalles': detalles,
     };
   }
+
 }
+

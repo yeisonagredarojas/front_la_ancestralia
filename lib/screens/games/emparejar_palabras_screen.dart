@@ -3,6 +3,8 @@ import 'dart:async';
 import '../../models/game_models.dart';
 import '../../services/games_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import '../../l10n/app_localizations.dart';
+import '../../l10n/app_localizations.dart';
 
 
 class EmparejarPalabrasScreen extends StatefulWidget {
@@ -124,7 +126,7 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
 
       // Preparar columnas
       _columnIzquierda = _palabras.map((p) => p.palabraInga).toList();
-      _columnDerecha = _palabras.map((p) => p.traduccionEspanol).toList()..shuffle();
+      _columnDerecha = _palabras.map((p) => p.traduccion).toList()..shuffle();
 
       // Iniciar cronómetro
       _iniciarCronometro();
@@ -280,33 +282,35 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text(
+          // AppLocalizations.of(context)!.game_completed_title,
           '¡Juego Completado! 🎉',
           style: TextStyle(fontWeight: FontWeight.bold),
+          
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildResultadoItem(
               icon: Icons.stars,
-              label: 'Puntuación',
+              label: AppLocalizations.of(context)!.score_label,
               value: '$_puntuacion',
               color: Colors.amber,
             ),
             _buildResultadoItem(
               icon: Icons.check_circle,
-              label: 'Aciertos',
+              label: AppLocalizations.of(context)!.correct_label,
               value: '$_aciertos',
               color: Colors.green,
             ),
             _buildResultadoItem(
               icon: Icons.cancel,
-              label: 'Errores',
+              label: AppLocalizations.of(context)!.wrong_label,
               value: '$_errores',
               color: Colors.red,
             ),
             _buildResultadoItem(
               icon: Icons.timer,
-              label: 'Tiempo',
+              label: AppLocalizations.of(context)!.time_label,
               value: _formatearTiempo(_tiempoSegundos),
               color: Colors.blue,
             ),
@@ -318,14 +322,14 @@ class _EmparejarPalabrasScreenState extends State<EmparejarPalabrasScreen> with 
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
-            child: const Text('Salir'),
+            child: Text(AppLocalizations.of(context)!.exit),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
               _reiniciarJuego();
             },
-            child: const Text('Jugar de nuevo'),
+            child: Text(AppLocalizations.of(context)!.play_again),
           ),
         ],
       ),
